@@ -1,0 +1,12 @@
+bin/
+obj/
+*.user
+*.suo
+.vscode/
+.DS_Store
+
+filmler.txt
+salonlar.txt
+seanslar.txt
+rezervasyonlar.txt
+sinema_verileri.json
