@@ -1,8 +1,8 @@
-# Movie Reservation System
+ Movie Reservation System
 
 Bu proje, C# ile geliştirilmiş konsol tabanlı bir sinema bilet rezervasyon sistemidir.
 
-## Özellikler
+** Özellikler
 
 - Müşteri ve yönetici ekranları
 - Film ekleme, listeleme, güncelleme ve silme
@@ -12,21 +12,21 @@ Bu proje, C# ile geliştirilmiş konsol tabanlı bir sinema bilet rezervasyon si
 - Rezervasyon yapma ve iptal etme
 - Dosya tabanlı veri saklama
 
-## Kullanılan OOP Kavramları
+** Kullanılan OOP Kavramları
 
 - Encapsulation
 - Inheritance
 - Polymorphism
 - Exception Handling
 
-## Kullanılan Teknolojiler
+** Kullanılan Teknolojiler
 
 - C#
 - .NET Console Application
 - Dosya işlemleri (`txt`)
 
-## Yönetici Girişi
+** Yönetici Girişi
 
-```text
+* text
 Kullanıcı adı: admin
 Şifre: 1234
