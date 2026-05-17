@@ -31,3 +31,6 @@ Bu proje, C# ile geliştirilmiş konsol tabanlı bir sinema bilet rezervasyon si
 * text
 Kullanıcı adı: admin
 Şifre: 1234
+
+Zeynep Özcan:Menü ekranları,Rezervasyon ve koltuk sistemi,Dosya işlemleri,Demo
+Azra Çelik:Sistem tasarımı ve OOP yapısı,CRUD işlemleri,Exception handling,GitHub entegrasyonu
