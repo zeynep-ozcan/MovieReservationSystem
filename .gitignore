@@ -5,6 +5,10 @@ obj/
 .vscode/
 .DS_Store
 
+movies.txt
+halls.txt
+showtimes.txt
+reservations.txt
 filmler.txt
 salonlar.txt
 seanslar.txt

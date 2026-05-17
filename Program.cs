@@ -1,318 +1,318 @@
-﻿SinemaSistemi sistem = DosyaYonetimi.Yukle();
+﻿CinemaSystem system = FileManager.Load();
 
-if (sistem.Filmler.Count == 0)
+if (system.Movies.Count == 0)
 {
-    sistem.FilmEkle("Interstellar", "Bilim Kurgu", 169);
-    sistem.FilmEkle("Ayla", "Dram", 125);
+    system.AddMovie("Interstellar", "Science Fiction", 169);
+    system.AddMovie("Ayla", "Drama", 125);
 
-    sistem.SalonEkle(1, 10);
-    sistem.SalonEkle(2, 8);
+    system.AddHall(1, 10);
+    system.AddHall(2, 8);
 
-    sistem.SeansEkle(1, 1, "14:00");
-    sistem.SeansEkle(2, 2, "18:30");
+    system.AddShowtime(1, 1, "14:00");
+    system.AddShowtime(2, 2, "18:30");
 }
 
-Yonetici yonetici = new Yonetici("Admin", "User", "admin", "1234");
+Admin admin = new Admin("Admin", "User", "admin", "1234");
 
-bool programCalisiyor = true;
+bool isProgramRunning = true;
 
-while (programCalisiyor)
+while (isProgramRunning)
 {
-    Console.WriteLine("\n=== SİNEMA BİLET REZERVASYON SİSTEMİ ===");
-    Console.WriteLine("1- Müşteri Girişi");
-    Console.WriteLine("2- Yönetici Girişi");
-    Console.WriteLine("0- Çıkış");
-    Console.Write("Seçiminiz: ");
+    Console.WriteLine("\n=== CINEMA TICKET RESERVATION SYSTEM ===");
+    Console.WriteLine("1- Customer Login");
+    Console.WriteLine("2- Admin Login");
+    Console.WriteLine("0- Exit");
+    Console.Write("Your choice: ");
 
-    string secim = Console.ReadLine();
+    string choice = Console.ReadLine();
 
     try
     {
-        switch (secim)
+        switch (choice)
         {
             case "1":
-                MusteriGirisi(sistem);
+                EnterCustomerMenu(system);
                 break;
 
             case "2":
-                YoneticiGirisi(sistem, yonetici);
+                EnterAdminMenu(system, admin);
                 break;
 
             case "0":
-    DosyaYonetimi.Kaydet(sistem);
-    programCalisiyor = false;
-    Console.WriteLine("Veriler kaydedildi. Program kapatılıyor...");
-    break;
+                FileManager.Save(system);
+                isProgramRunning = false;
+                Console.WriteLine("Data saved. Shutting down...");
+                break;
 
             default:
-                Console.WriteLine("Geçersiz seçim.");
+                Console.WriteLine("Invalid choice.");
                 break;
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine("Hata: " + ex.Message);
+        Console.WriteLine("Error: " + ex.Message);
     }
 }
 
-static void MusteriGirisi(SinemaSistemi sistem)
+static void EnterCustomerMenu(CinemaSystem system)
 {
-    Console.Write("Adınız: ");
-    string ad = Console.ReadLine();
+    Console.Write("First name: ");
+    string firstName = Console.ReadLine();
 
-    Console.Write("Soyadınız: ");
-    string soyad = Console.ReadLine();
+    Console.Write("Last name: ");
+    string lastName = Console.ReadLine();
 
-    Musteri musteri = new Musteri(ad, soyad);
+    Customer customer = new Customer(firstName, lastName);
 
-    bool musteriMenu = true;
+    bool isCustomerMenuActive = true;
 
-    while (musteriMenu)
+    while (isCustomerMenuActive)
     {
-        Console.WriteLine("\n=== MÜŞTERİ MENÜSÜ ===");
-        Console.WriteLine("1- Filmleri Listele");
-        Console.WriteLine("2- Seansları Listele");
-        Console.WriteLine("3- Koltukları Görüntüle");
-        Console.WriteLine("4- Rezervasyon Yap");
-        Console.WriteLine("5- Rezervasyonlarımı Görüntüle");
-        Console.WriteLine("6- Rezervasyon İptal Et");
-        Console.WriteLine("0- Geri Dön");
-        Console.Write("Seçiminiz: ");
+        Console.WriteLine("\n=== CUSTOMER MENU ===");
+        Console.WriteLine("1- List Movies");
+        Console.WriteLine("2- List Showtimes");
+        Console.WriteLine("3- View Seats");
+        Console.WriteLine("4- Make Reservation");
+        Console.WriteLine("5- View My Reservations");
+        Console.WriteLine("6- Cancel Reservation");
+        Console.WriteLine("0- Back");
+        Console.Write("Your choice: ");
 
-        string secim = Console.ReadLine();
+        string choice = Console.ReadLine();
 
         try
         {
-            switch (secim)
+            switch (choice)
             {
                 case "1":
-                    sistem.FilmleriListele();
+                    system.ListMovies();
                     break;
 
                 case "2":
-                    sistem.SeanslariListele();
+                    system.ListShowtimes();
                     break;
 
                 case "3":
-                    Console.Write("Seans ID giriniz: ");
-                    int seansIdKoltuk = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Enter showtime ID: ");
+                    int showtimeIdForSeats = Convert.ToInt32(Console.ReadLine());
 
-                    Seans seans = sistem.SeansBul(seansIdKoltuk);
-                    seans.Salon.KoltuklariGoster();
+                    Showtime showtime = system.FindShowtime(showtimeIdForSeats);
+                    showtime.Hall.DisplaySeats();
                     break;
 
                 case "4":
-                    sistem.SeanslariListele();
+                    system.ListShowtimes();
 
-                    Console.Write("Seans ID giriniz: ");
-                    int seansId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Enter showtime ID: ");
+                    int showtimeId = Convert.ToInt32(Console.ReadLine());
 
-                    Console.Write("Koltuk No giriniz: ");
-                    int koltukNo = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Enter seat number: ");
+                    int seatNumber = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.RezervasyonYap(musteri, seansId, koltukNo);
-                    Console.WriteLine("Rezervasyon başarıyla oluşturuldu.");
+                    system.MakeReservation(customer, showtimeId, seatNumber);
+                    Console.WriteLine("Reservation created successfully.");
                     break;
 
                 case "5":
-                    sistem.MusteriRezervasyonlariniListele(musteri);
+                    system.ListCustomerReservations(customer);
                     break;
 
                 case "6":
-                    sistem.MusteriRezervasyonlariniListele(musteri);
+                    system.ListCustomerReservations(customer);
 
-                    Console.Write("İptal edilecek rezervasyon ID: ");
-                    int rezervasyonId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Enter reservation ID to cancel: ");
+                    int reservationId = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.RezervasyonIptalEt(musteri, rezervasyonId);
-                    Console.WriteLine("Rezervasyon iptal edildi.");
+                    system.CancelReservation(customer, reservationId);
+                    Console.WriteLine("Reservation cancelled.");
                     break;
 
                 case "0":
-                    musteriMenu = false;
+                    isCustomerMenuActive = false;
                     break;
 
                 default:
-                    Console.WriteLine("Geçersiz seçim.");
+                    Console.WriteLine("Invalid choice.");
                     break;
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Hata: " + ex.Message);
+            Console.WriteLine("Error: " + ex.Message);
         }
     }
 }
 
-static void YoneticiGirisi(SinemaSistemi sistem, Yonetici yonetici)
+static void EnterAdminMenu(CinemaSystem system, Admin admin)
 {
-    Console.Write("Kullanıcı adı: ");
-    string kullaniciAdi = Console.ReadLine();
+    Console.Write("Username: ");
+    string username = Console.ReadLine();
 
-    Console.Write("Şifre: ");
-    string sifre = Console.ReadLine();
+    Console.Write("Password: ");
+    string password = Console.ReadLine();
 
-    if (!yonetici.GirisYap(kullaniciAdi, sifre))
+    if (!admin.Login(username, password))
     {
-        Console.WriteLine("Hatalı kullanıcı adı veya şifre.");
+        Console.WriteLine("Invalid username or password.");
         return;
     }
 
-    bool yoneticiMenu = true;
+    bool isAdminMenuActive = true;
 
-    while (yoneticiMenu)
+    while (isAdminMenuActive)
     {
-        Console.WriteLine("\n=== YÖNETİCİ MENÜSÜ ===");
-        Console.WriteLine("1- Film Ekle");
-        Console.WriteLine("2- Film Listele");
-        Console.WriteLine("3- Film Güncelle");
-        Console.WriteLine("4- Film Sil");
-        Console.WriteLine("5- Seans Ekle");
-        Console.WriteLine("6- Seans Listele");
-        Console.WriteLine("7- Seans Güncelle");
-        Console.WriteLine("8- Seans Sil");
-        Console.WriteLine("9- Salon Ekle");
-        Console.WriteLine("10- Salon Listele");
-        Console.WriteLine("11- Tüm Rezervasyonları Görüntüle");
-        Console.WriteLine("0- Geri Dön");
-        Console.Write("Seçiminiz: ");
+        Console.WriteLine("\n=== ADMIN MENU ===");
+        Console.WriteLine("1- Add Movie");
+        Console.WriteLine("2- List Movies");
+        Console.WriteLine("3- Update Movie");
+        Console.WriteLine("4- Delete Movie");
+        Console.WriteLine("5- Add Showtime");
+        Console.WriteLine("6- List Showtimes");
+        Console.WriteLine("7- Update Showtime");
+        Console.WriteLine("8- Delete Showtime");
+        Console.WriteLine("9- Add Hall");
+        Console.WriteLine("10- List Halls");
+        Console.WriteLine("11- View All Reservations");
+        Console.WriteLine("0- Back");
+        Console.Write("Your choice: ");
 
-        string secim = Console.ReadLine();
+        string choice = Console.ReadLine();
 
         try
         {
-            switch (secim)
+            switch (choice)
             {
                 case "1":
-                    Console.Write("Film adı: ");
-                    string ad = Console.ReadLine();
+                    Console.Write("Movie name: ");
+                    string name = Console.ReadLine();
 
-                    Console.Write("Film türü: ");
-                    string tur = Console.ReadLine();
+                    Console.Write("Movie genre: ");
+                    string genre = Console.ReadLine();
 
-                    Console.Write("Film süresi: ");
-                    int sure = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Movie duration (minutes): ");
+                    int duration = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.FilmEkle(ad, tur, sure);
-                    Console.WriteLine("Film eklendi.");
+                    system.AddMovie(name, genre, duration);
+                    Console.WriteLine("Movie added.");
                     break;
 
                 case "2":
-                    sistem.FilmleriListele();
+                    system.ListMovies();
                     break;
 
                 case "3":
-                    sistem.FilmleriListele();
+                    system.ListMovies();
 
-                    Console.Write("Güncellenecek film ID: ");
-                    int filmId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Movie ID to update: ");
+                    int movieId = Convert.ToInt32(Console.ReadLine());
 
-                    Console.Write("Yeni film adı: ");
-                    string yeniAd = Console.ReadLine();
+                    Console.Write("New movie name: ");
+                    string newName = Console.ReadLine();
 
-                    Console.Write("Yeni film türü: ");
-                    string yeniTur = Console.ReadLine();
+                    Console.Write("New movie genre: ");
+                    string newGenre = Console.ReadLine();
 
-                    Console.Write("Yeni film süresi: ");
-                    int yeniSure = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("New movie duration (minutes): ");
+                    int newDuration = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.FilmGuncelle(filmId, yeniAd, yeniTur, yeniSure);
-                    Console.WriteLine("Film güncellendi.");
+                    system.UpdateMovie(movieId, newName, newGenre, newDuration);
+                    Console.WriteLine("Movie updated.");
                     break;
 
                 case "4":
-                    sistem.FilmleriListele();
+                    system.ListMovies();
 
-                    Console.Write("Silinecek film ID: ");
-                    int silinecekFilmId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Movie ID to delete: ");
+                    int movieIdToDelete = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.FilmSil(silinecekFilmId);
-                    Console.WriteLine("Film silindi.");
+                    system.DeleteMovie(movieIdToDelete);
+                    Console.WriteLine("Movie deleted.");
                     break;
 
                 case "5":
-                    sistem.FilmleriListele();
-                    sistem.SalonlariListele();
+                    system.ListMovies();
+                    system.ListHalls();
 
-                    Console.Write("Film ID: ");
-                    int seansFilmId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Movie ID: ");
+                    int movieIdForShowtime = Convert.ToInt32(Console.ReadLine());
 
-                    Console.Write("Salon No: ");
-                    int salonNo = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Hall number: ");
+                    int hallNumber = Convert.ToInt32(Console.ReadLine());
 
-                    Console.Write("Saat: ");
-                    string saat = Console.ReadLine();
+                    Console.Write("Time: ");
+                    string time = Console.ReadLine();
 
-                    sistem.SeansEkle(seansFilmId, salonNo, saat);
-                    Console.WriteLine("Seans eklendi.");
+                    system.AddShowtime(movieIdForShowtime, hallNumber, time);
+                    Console.WriteLine("Showtime added.");
                     break;
 
                 case "6":
-                    sistem.SeanslariListele();
+                    system.ListShowtimes();
                     break;
 
                 case "7":
-                    sistem.SeanslariListele();
+                    system.ListShowtimes();
 
-                    Console.Write("Güncellenecek seans ID: ");
-                    int guncellenecekSeansId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Showtime ID to update: ");
+                    int showtimeIdToUpdate = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.FilmleriListele();
-                    Console.Write("Yeni film ID: ");
-                    int yeniFilmId = Convert.ToInt32(Console.ReadLine());
+                    system.ListMovies();
+                    Console.Write("New movie ID: ");
+                    int newMovieId = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.SalonlariListele();
-                    Console.Write("Yeni salon no: ");
-                    int yeniSalonNo = Convert.ToInt32(Console.ReadLine());
+                    system.ListHalls();
+                    Console.Write("New hall number: ");
+                    int newHallNumber = Convert.ToInt32(Console.ReadLine());
 
-                    Console.Write("Yeni saat: ");
-                    string yeniSaat = Console.ReadLine();
+                    Console.Write("New time: ");
+                    string newTime = Console.ReadLine();
 
-                    sistem.SeansGuncelle(guncellenecekSeansId, yeniFilmId, yeniSalonNo, yeniSaat);
-                    Console.WriteLine("Seans güncellendi.");
+                    system.UpdateShowtime(showtimeIdToUpdate, newMovieId, newHallNumber, newTime);
+                    Console.WriteLine("Showtime updated.");
                     break;
 
                 case "8":
-                    sistem.SeanslariListele();
+                    system.ListShowtimes();
 
-                    Console.Write("Silinecek seans ID: ");
-                    int silinecekSeansId = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Showtime ID to delete: ");
+                    int showtimeIdToDelete = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.SeansSil(silinecekSeansId);
-                    Console.WriteLine("Seans silindi.");
+                    system.DeleteShowtime(showtimeIdToDelete);
+                    Console.WriteLine("Showtime deleted.");
                     break;
 
                 case "9":
-                    Console.Write("Salon No: ");
-                    int yeniSalonNumarasi = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Hall number: ");
+                    int newHallNumberForAdd = Convert.ToInt32(Console.ReadLine());
 
-                    Console.Write("Koltuk sayısı: ");
-                    int koltukSayisi = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Seat count: ");
+                    int seatCount = Convert.ToInt32(Console.ReadLine());
 
-                    sistem.SalonEkle(yeniSalonNumarasi, koltukSayisi);
-                    Console.WriteLine("Salon eklendi.");
+                    system.AddHall(newHallNumberForAdd, seatCount);
+                    Console.WriteLine("Hall added.");
                     break;
 
                 case "10":
-                    sistem.SalonlariListele();
+                    system.ListHalls();
                     break;
 
                 case "11":
-                    sistem.RezervasyonlariListele();
+                    system.ListReservations();
                     break;
 
                 case "0":
-                    yoneticiMenu = false;
+                    isAdminMenuActive = false;
                     break;
 
                 default:
-                    Console.WriteLine("Geçersiz seçim.");
+                    Console.WriteLine("Invalid choice.");
                     break;
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Hata: " + ex.Message);
+            Console.WriteLine("Error: " + ex.Message);
         }
     }
 }
