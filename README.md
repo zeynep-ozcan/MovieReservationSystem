@@ -17,7 +17,7 @@ Bu proje, C# ile geliştirilmiş konsol tabanlı bir sinema bilet rezervasyon si
 - Encapsulation
 - Inheritance
 - Polymorphism
-- Exception Handling
+
 
 ** Kullanılan Teknolojiler
 
